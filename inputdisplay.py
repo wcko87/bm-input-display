@@ -269,7 +269,7 @@ class InputDisplay(object):
         root.mainloop()
 
 def main():
-    config_file = 'bm_config_p1.txt'
+    config_file = 'profiles/profile_custom.txt'
     if len(sys.argv) > 1: config_file = sys.argv[1]
     settings, buttons, turntables = parse_config(config_file)
     controller = bmcon.BMStatus(int(settings['joystick_id']))
