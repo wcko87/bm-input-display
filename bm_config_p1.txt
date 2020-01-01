@@ -1,0 +1,146 @@
+// For key codes for the keybinds, refer to this link:
+// https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes
+// Use double slashes like these to comment out lines - everything after a // will be ignored in the config.
+
+++++SETTINGS++++
+joystick_id=0
+width=360
+height=200
+
+
+++++DEFAULTCOLORS++++
+background_color=#000000
+button_color_dark=#606060
+button_color_lit=#d03030
+button_color_flash=#ffd8d8
+turntable_color_counterclockwise=#40c040
+turntable_color_clockwise=#f04040
+turntable_color_outer_ring=#ffffff
+turntable_color_inner_ring=#ffffff
+turntable_color_axle=#ff0000
+turntable_color_circle=#0000ff
+
+
+++++DEFAULTSIZES++++
+turntable_diameter_outline=170
+turntable_diameter_outer_ring=160
+turntable_diameter_inner_ring=70
+turntable_diameter_axle=20
+turntable_diameter_circle=40
+turntable_diameter_circle_orbit=114
+turntable_thickness_outline=12
+turntable_thickness_outer_ring=4
+turntable_thickness_inner_ring=3
+turntable_thickness_axle=3
+turntable_thickness_circle=7
+
+
+++++DEFAULTPARAMETERS++++
+button_flash_fade_time_ms=150
+turntable_detection_timeout_ms=100
+
+
+
+++++TURNTABLE++++
+turntable_axis_index=0
+turntable_center_x=100
+turntable_center_y=100
+
+// Scratch keybinds if the key is designed to be held down. Uncomment to use.
+//scratch_down_hold=0x25 // VK_LEFT
+//scratch_up_hold=0x27 // VK_RIGHT
+
+// Scratch keybinds if the key is designed to be "pressed" with a turntable flick. Uncomment to use.
+//scratch_down=0x25 // VK_LEFT
+//scratch_up=0x27 // VK_RIGHT
+
+
+++++BUTTON++++ // key 1
+button_input_index=8
+button_center_x=230
+button_center_y=160
+button_width=24
+button_height=40
+
+// You can add keybinds to buttons. This is an example. Uncomment to use.
+//button_key_bind=0x25 // VK_LEFT
+
+
+++++BUTTON++++ // key 2
+button_input_index=7
+button_center_x=246
+button_center_y=104
+button_width=24
+button_height=40
+
+
+++++BUTTON++++ // key 3
+button_input_index=4
+button_center_x=263
+button_center_y=160
+button_width=24
+button_height=40
+
+
+++++BUTTON++++ // key 4
+button_input_index=3
+button_center_x=279
+button_center_y=104
+button_width=24
+button_height=40
+
+
+++++BUTTON++++ // key 5
+button_input_index=0
+button_center_x=296
+button_center_y=160
+button_width=24
+button_height=40
+
+
+++++BUTTON++++ // key 6
+button_input_index=2
+button_center_x=312
+button_center_y=104
+button_width=24
+button_height=40
+
+
+++++BUTTON++++ // key 7
+button_input_index=1
+button_center_x=329
+button_center_y=160
+button_width=24
+button_height=40
+
+
+++++BUTTON++++ // option key 1
+button_input_index=9
+button_center_x=228
+button_center_y=40
+button_width=25
+button_height=25
+
+
+++++BUTTON++++ // option key 2
+button_input_index=6
+button_center_x=262
+button_center_y=40
+button_width=25
+button_height=25
+
+
+++++BUTTON++++ // option key 3
+button_input_index=5
+button_center_x=296
+button_center_y=40
+button_width=25
+button_height=25
+
+
+++++BUTTON++++ // option key 4
+button_input_index=10
+button_center_x=330
+button_center_y=40
+button_width=25
+button_height=25
