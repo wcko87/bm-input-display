@@ -3,6 +3,11 @@ Input display for rhythm game controllers
 
 [Download Here](https://ci.appveyor.com/project/wcko87/bm-input-display/build/artifacts)
 
+### Video Example: (the input display is in the bottom right corner)
+
+[![input_display_sample](https://user-images.githubusercontent.com/27341392/71674633-b9208480-2d49-11ea-8fa8-194ee5bbfe06.png)](https://thumbs.gfycat.com/PositivePoorAsiaticmouflon-mobile.mp4)
+
+
 # How to Use
 
 Double click on the bat file corresponding to a profile to run the input display using that profile.
