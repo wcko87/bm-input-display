@@ -11,6 +11,7 @@ Input display for rhythm game controllers
 # How to Use
 
 Double click on the bat file corresponding to a profile to run the input display using that profile.
+- [Example Profile (BM P1)](https://raw.githubusercontent.com/wcko87/bm-input-display/master/profiles/profile_bm_p1.txt)
 
 Check the profiles folder if you want to customize the input display.
 - There are a lot of things that can be configured. (layout, colors, keybinds, etc.)
