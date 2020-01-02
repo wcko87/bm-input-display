@@ -36,6 +36,11 @@ def hex_to_rgb(s):
 def center_to_bounds(cx,cy,width,height):
     cx, cy, width, height = map(float, (cx, cy, width, height))
     return cx-width/2, cy-height/2, cx+width/2, cy+height/2
+    
+def parse_bool(s):
+    if s.lower() in ['true', 'yes', '1', 'y', 't']: return True
+    elif s.lower() in ['false', 'no', '0', 'n', 'f']: return False
+    else: raise Exception('Invalid true/false value: %s' % s)
 
 def parse_config(file_name):
     with open(file_name) as f:
@@ -135,6 +140,10 @@ class Turntable(object):
         self.last_value = None
         self.velocity = 0
         
+        self.integer_angle = 0
+        self.single_revolution_distance = round(65536 / float(get_data('turntable_num_revolutions_per_cycle')))
+        self.reverse_turntable = parse_bool(get_data('turntable_reverse_direction'))
+        
         self.last_positive_time = 0
         self.last_negative_time = 0
         self.detection_timeout = int(get_data('turntable_detection_timeout_ms'))/1000
@@ -166,20 +175,24 @@ class InputDisplay(object):
         for tt in self.ui_turntables:
             value = tt_axes[tt.index]
         
-            # Turntable angle
-            angle = -(value)/(65536//4)*TWO_PI
-            cx = tt.center_x + tt.orbit_r*sin(angle)
-            cy = tt.center_y + tt.orbit_r*cos(angle)
-            canvas.coords(tt.inner_circle, cx-tt.circle_r, cy-tt.circle_r, cx+tt.circle_r, cy+tt.circle_r)
-
-            # Turntable highlight
             if tt.last_value == None: tt.last_value = value
             diff_y = value - tt.last_value
             if diff_y > 32768: diff_y -= 65536 + 255
             elif diff_y < -32768: diff_y += 65536 + 255
-            diff_y = sign(diff_y)
+            if tt.reverse_turntable: diff_y = -diff_y
+            
+            # Turntable angle
+            tt.integer_angle = (tt.integer_angle + diff_y) % tt.single_revolution_distance
+            #angle = -(value)/(65536//4)*TWO_PI
+            angle = -(tt.integer_angle/tt.single_revolution_distance)*TWO_PI
+            cx = tt.center_x + tt.orbit_r*sin(angle)
+            cy = tt.center_y + tt.orbit_r*cos(angle)
+            canvas.coords(tt.inner_circle, cx-tt.circle_r, cy-tt.circle_r, cx+tt.circle_r, cy+tt.circle_r)
 
-            tt.velocity = tt.velocity*0.7 + diff_y*0.3
+            sign_diff_y = sign(diff_y)
+
+            # Turntable highlight
+            tt.velocity = tt.velocity*0.7 + sign_diff_y*0.3
             colorvec = tt.color_positive if tt.velocity>=0 else tt.color_negative
             color = '#{:02x}{:02x}{:02x}'.format(*(int(min(abs(tt.velocity)*10,0.99)*v) for v in colorvec))
             canvas.itemconfig(tt.outline_circle, outline=color)
@@ -194,23 +207,21 @@ class InputDisplay(object):
                 tt.scratch_up_hold.release()
                 tt.scratch_down_hold.release()
                 
-            if diff_y > 0:
+            if sign_diff_y > 0:
                 if curr_time - tt.last_positive_time <= tt.detection_timeout:
                     tt.scratch_up.press()
                 tt.scratch_down.release()
                 tt.last_positive_time = curr_time
-            elif diff_y < 0:
+            elif sign_diff_y < 0:
                 if curr_time - tt.last_negative_time <= tt.detection_timeout:
                     tt.scratch_down.press()
                 tt.scratch_up.release()
                 tt.last_negative_time = curr_time
-            else: # diff_y == 0
+            else: # sign_diff_y == 0
                 if curr_time - tt.last_positive_time > tt.detection_timeout:
                     tt.scratch_up.release()
                 if curr_time - tt.last_negative_time > tt.detection_timeout:
                     tt.scratch_down.release()
-
-            #if abs(velocity) < 0.6: diff_y = 0
 
             tt.last_value = value
         
