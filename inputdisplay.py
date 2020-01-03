@@ -169,8 +169,9 @@ class InputDisplay(object):
         curr_time = time.time()
         
         for bt in self.ui_buttons:
-            canvas.itemconfig(bt.rect, fill=bt.get_color(button_status[bt.button_index], curr_time))
-            bt.key_bind.press() if button_status[bt.button_index] else bt.key_bind.release()
+            button_pressed = button_status[bt.button_index] if bt.button_index < len(button_status) else False
+            canvas.itemconfig(bt.rect, fill=bt.get_color(button_pressed, curr_time))
+            bt.key_bind.press() if button_pressed else bt.key_bind.release()
             
         for tt in self.ui_turntables:
             value = tt_axes[tt.index]
