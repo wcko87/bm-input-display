@@ -160,7 +160,7 @@ class InputDisplay(object):
         poll_result = self.controller.poll()
         if poll_result == False:
             print("controller not detected.")
-            canvas.after(1000, loop)
+            self.canvas.after(1000, self.loop)
             return
         button_status, info = poll_result
         tt_axes = [info.dwXpos,info.dwYpos,info.dwZpos,info.dwRpos,info.dwUpos,info.dwVpos]
