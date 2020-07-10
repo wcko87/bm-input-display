@@ -32,3 +32,4 @@ Then to run the script (using the `profile_bm_p1.txt` profile for example), run:
 ```
 python inputdisplay.py profiles/profile_bm_p1.txt
 ```
+
