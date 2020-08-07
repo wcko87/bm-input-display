@@ -14,7 +14,7 @@ height=200
 
 // Set use_directinput_keybinds to true to use DirectInput keybinds instead of Win32API keybinds.
 // DirectInput keybinds are required for IIDX INFINITAS, however they offer less keybind options.
-use_directinput_keybinds=false
+use_directinput_keybinds=true
 
 ++++DEFAULTCOLORS++++
 background_color=#000000
@@ -62,8 +62,8 @@ turntable_center_y=100
 //scratch_up_hold=0x27 // VK_RIGHT
 
 // Scratch keybinds if the key is designed to be "pressed" with a turntable flick. Uncomment to use.
-//scratch_down=0x25 // VK_LEFT
-//scratch_up=0x27 // VK_RIGHT
+scratch_down=0x36 // DIK_RSHIFT
+scratch_up=0x9D // DIK_RCONTROL
 
 
 ++++BUTTON++++ // key 1
@@ -74,8 +74,7 @@ button_width=24
 button_height=40
 
 // You can add keybinds to buttons. This is an example. Uncomment to use.
-//button_key_bind=0x25 // VK_LEFT
-
+button_key_bind=0x30 // DIK_B
 
 ++++BUTTON++++ // key 2
 button_input_index=7
@@ -84,6 +83,7 @@ button_center_y=104
 button_width=24
 button_height=40
 
+button_key_bind=0x23 // DIK_H
 
 ++++BUTTON++++ // key 3
 button_input_index=4
@@ -92,6 +92,7 @@ button_center_y=160
 button_width=24
 button_height=40
 
+button_key_bind=0x31 // DIK_N
 
 ++++BUTTON++++ // key 4
 button_input_index=3
@@ -100,6 +101,7 @@ button_center_y=104
 button_width=24
 button_height=40
 
+button_key_bind=0x24 // DIK_J
 
 ++++BUTTON++++ // key 5
 button_input_index=0
@@ -108,6 +110,7 @@ button_center_y=160
 button_width=24
 button_height=40
 
+button_key_bind=0x32 // DIK_M
 
 ++++BUTTON++++ // key 6
 button_input_index=2
@@ -116,6 +119,7 @@ button_center_y=104
 button_width=24
 button_height=40
 
+button_key_bind=0x25 // DIK_K
 
 ++++BUTTON++++ // key 7
 button_input_index=1
@@ -124,6 +128,7 @@ button_center_y=160
 button_width=24
 button_height=40
 
+button_key_bind=0x33 // DIK_COMMA
 
 ++++BUTTON++++ // option key 1
 button_input_index=9
@@ -155,3 +160,4 @@ button_center_x=136
 button_center_y=40
 button_width=25
 button_height=25
+

@@ -5,10 +5,12 @@ import time
 import bmcon
 import sys
 from win32api import keybd_event
+from directinput import PressKey, ReleaseKey
+
 sign = lambda a: (a>0) - (a<0)
 TWO_PI = math.pi*2
 
-class KeyBind(object):
+class KeyBindWin32API(object):
     def __init__(self, key_code):
         self.key_code = key_code
         self.pressed = False
@@ -24,6 +26,30 @@ class KeyBind(object):
         if not self.pressed: return
         keybd_event(self.key_code, 0, 2, 0)
         self.pressed = False
+        
+
+class KeyBindDirectInput(object):
+    def __init__(self, key_code):
+        self.key_code = key_code
+        self.pressed = False
+        
+    def press(self):
+        if self.key_code == None: return
+        if self.pressed: return
+        PressKey(self.key_code)
+        self.pressed = True
+    
+    def release(self):
+        if self.key_code == None: return
+        if not self.pressed: return
+        ReleaseKey(self.key_code)
+        self.pressed = False
+        
+def get_keybind_class(get_data):
+    if parse_bool(get_data('use_directinput_keybinds', default='false')):
+        return KeyBindDirectInput
+    else:
+        return KeyBindWin32API
 
 def int_or_hex(v):
     return int(v, 0)
@@ -102,6 +128,7 @@ class KeyButton(object):
         self.color_dark = get_data('button_color_dark')
         self.rgb_flash = hex_to_rgb(get_data('button_color_flash'))
         self.rgb_flash_diff = tuple(b-a for a,b in zip(self.rgb_flash, hex_to_rgb(self.color_lit)))
+        KeyBind = get_keybind_class(get_data)    
         self.key_bind = KeyBind(get_data('button_key_bind', transform=int_or_hex, default=None))
         
         self.flash_duration = int(get_data('button_flash_fade_time_ms'))/1000
@@ -130,6 +157,7 @@ class Turntable(object):
         self.index = int(get_data('turntable_axis_index'))
         self.color_positive = hex_to_rgb(get_data('turntable_color_clockwise'))
         self.color_negative = hex_to_rgb(get_data('turntable_color_counterclockwise'))
+        KeyBind = get_keybind_class(get_data)
         self.scratch_up_hold = KeyBind(get_data('scratch_up_hold', transform=int_or_hex, default=None))
         self.scratch_down_hold = KeyBind(get_data('scratch_down_hold', transform=int_or_hex, default=None))
         self.scratch_up = KeyBind(get_data('scratch_up', transform=int_or_hex, default=None))

@@ -1,12 +1,20 @@
-// For key codes for the keybinds, refer to this link:
-// https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes
 // Use double slashes like these to comment out lines - everything after a // will be ignored in the config.
+
+// For key codes for the keybinds, refer to this link:
+// Win32API Key Code Table (only use this table when you have NOT set use_directinput_keybinds to true)
+// https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes
+
+// DirectInput Key Code Table (only use this table when you have set use_directinput_keybinds=true)
+// http://www.flint.jp/misc/?q=dik&lang=en
 
 ++++SETTINGS++++
 joystick_id=0
 width=360
 height=200
 
+// Set use_directinput_keybinds to true to use DirectInput keybinds instead of Win32API keybinds.
+// DirectInput keybinds are required for IIDX INFINITAS, however they offer less keybind options.
+use_directinput_keybinds=false
 
 ++++DEFAULTCOLORS++++
 background_color=#000000
