@@ -177,6 +177,7 @@ class Turntable(object):
         self.index = int(get_data('turntable_axis_index'))
         self.color_positive = hex_to_rgb(get_data('turntable_color_clockwise'))
         self.color_negative = hex_to_rgb(get_data('turntable_color_counterclockwise'))
+        self.color_background = hex_to_rgb(get_data('turntable_color_background', default='#404040'))
         KeyBind = get_keybind_class(get_data)
         self.scratch_up_hold = KeyBind(get_data('scratch_up_hold', transform=int_or_hex, default=None))
         self.scratch_down_hold = KeyBind(get_data('scratch_down_hold', transform=int_or_hex, default=None))
@@ -254,7 +255,9 @@ class InputDisplay(object):
             # Turntable highlight
             tt.velocity = tt.velocity*0.7 + sign_diff_y*0.3
             colorvec = tt.color_positive if tt.velocity>=0 else tt.color_negative
-            color = '#{:02x}{:02x}{:02x}'.format(*(int(min(abs(tt.velocity)*10,0.99)*v) for v in colorvec))
+            base_color = tt.color_background
+            p = min(abs(tt.velocity)*10,0.99)
+            color = '#{:02x}{:02x}{:02x}'.format(*(int(p*v+(1-p)*c) for c,v in zip(base_color,colorvec)))
             canvas.itemconfig(tt.outline_circle, outline=color)
             
             if tt.velocity > 0.2:
