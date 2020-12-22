@@ -45,6 +45,26 @@ class KeyBindDirectInput(object):
         ReleaseKey(self.key_code)
         self.pressed = False
         
+class KeyRepeater(object):
+    def __init__(self, keybind, interval_ticks, firstinput_ticks):
+        self.keybind = keybind
+        self.interval = interval_ticks
+        self.firstinput = firstinput_ticks
+        self.remaining_ticks = -1
+        
+    def tick(self):
+        if self.remaining_ticks == -1:
+            self.remaining_ticks = self.firstinput
+        if self.remaining_ticks == 0:
+            self.keybind.press()
+            self.keybind.release()
+            self.remaining_ticks = self.interval
+        self.remaining_ticks -= 1
+    
+    def stop(self):
+        self.remaining_ticks = -1
+        
+        
 def get_keybind_class(get_data):
     if parse_bool(get_data('use_directinput_keybinds', default='false')):
         return KeyBindDirectInput
@@ -162,6 +182,17 @@ class Turntable(object):
         self.scratch_down_hold = KeyBind(get_data('scratch_down_hold', transform=int_or_hex, default=None))
         self.scratch_up = KeyBind(get_data('scratch_up', transform=int_or_hex, default=None))
         self.scratch_down = KeyBind(get_data('scratch_down', transform=int_or_hex, default=None))
+        self.scratch_up_repeating = KeyRepeater(
+            KeyBind(get_data('scratch_up_repeating', transform=int_or_hex, default=None)),
+            get_data('keyrepeat_firstinput_ticks', transform=int_or_hex, default=2),
+            get_data('keyrepeat_interval_ticks', transform=int_or_hex, default=2),
+        )
+        self.scratch_down_repeating = KeyRepeater(
+            KeyBind(get_data('scratch_down_repeating', transform=int_or_hex, default=None)),
+            get_data('keyrepeat_firstinput_ticks', transform=int_or_hex, default=2),
+            get_data('keyrepeat_interval_ticks', transform=int_or_hex, default=2),
+        )
+        
         
         self.inner_circle = inner_circle
         self.outline_circle = outline_circle
@@ -239,18 +270,24 @@ class InputDisplay(object):
             if sign_diff_y > 0:
                 if curr_time - tt.last_positive_time <= tt.detection_timeout:
                     tt.scratch_up.press()
+                tt.scratch_up_repeating.tick()
                 tt.scratch_down.release()
+                tt.scratch_down_repeating.stop()
                 tt.last_positive_time = curr_time
             elif sign_diff_y < 0:
                 if curr_time - tt.last_negative_time <= tt.detection_timeout:
                     tt.scratch_down.press()
+                tt.scratch_down_repeating.tick()
                 tt.scratch_up.release()
+                tt.scratch_up_repeating.stop()
                 tt.last_negative_time = curr_time
             else: # sign_diff_y == 0
                 if curr_time - tt.last_positive_time > tt.detection_timeout:
                     tt.scratch_up.release()
+                    tt.scratch_up_repeating.stop()
                 if curr_time - tt.last_negative_time > tt.detection_timeout:
                     tt.scratch_down.release()
+                    tt.scratch_down_repeating.stop()
 
             tt.last_value = value
         

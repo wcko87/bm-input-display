@@ -65,6 +65,14 @@ turntable_center_y=100
 scratch_down=0x1D // DIK_LCONTROL
 scratch_up=0x2A // DIK_LSHIFT
 
+// Scratch keybinds if the key is designed to be repeatedly tapped as the turntable is rotating. Uncomment to use.
+//scratch_down_repeating=0x25 // VK_LEFT
+//scratch_up_repeating=0x27 // VK_RIGHT
+
+// Number of ticks before first input for scratch repeating inputs
+keyrepeat_firstinput_ticks=2
+// Interval between inputs (e.g. 2 means 2 ticks for one input) for scratch repeating inputs
+keyrepeat_interval_ticks=2
 
 ++++BUTTON++++ // key 1
 button_input_index=8
