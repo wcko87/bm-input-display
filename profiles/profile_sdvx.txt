@@ -27,6 +27,7 @@ turntable_color_outer_ring=#a0a0a0
 turntable_color_inner_ring=#808080
 turntable_color_axle=#a0a0a0
 turntable_color_circle=#0000ff
+turntable_color_glow_background=#404040
 
 
 ++++DEFAULTSIZES++++

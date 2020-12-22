@@ -177,7 +177,7 @@ class Turntable(object):
         self.index = int(get_data('turntable_axis_index'))
         self.color_positive = hex_to_rgb(get_data('turntable_color_clockwise'))
         self.color_negative = hex_to_rgb(get_data('turntable_color_counterclockwise'))
-        self.color_background = hex_to_rgb(get_data('turntable_color_background', default='#404040'))
+        self.color_background = hex_to_rgb(get_data('turntable_color_glow_background', default='#404040'))
         KeyBind = get_keybind_class(get_data)
         self.scratch_up_hold = KeyBind(get_data('scratch_up_hold', transform=int_or_hex, default=None))
         self.scratch_down_hold = KeyBind(get_data('scratch_down_hold', transform=int_or_hex, default=None))
