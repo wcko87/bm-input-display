@@ -46,7 +46,7 @@ class KeyBindDirectInput(object):
         self.pressed = False
         
 class KeyRepeater(object):
-    def __init__(self, keybind, interval_ticks, firstinput_ticks):
+    def __init__(self, keybind, firstinput_ticks, interval_ticks):
         self.keybind = keybind
         self.interval = interval_ticks
         self.firstinput = firstinput_ticks
