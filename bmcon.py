@@ -93,8 +93,8 @@ class BMStatus(object):
         # Check if the joystick is plugged in.
         info = JOYINFO()
         p_info = ctypes.pointer(info)
-        if joyGetPos(0, p_info) != 0:
-            print("Joystick %d not plugged in." % (joystick_id + 1))
+        if joyGetPos(joystick_id, p_info) != 0:
+            print("Joystick %d not plugged in." % (joystick_id))
             
         # Get device capabilities.
         self.caps = JOYCAPS()
@@ -106,9 +106,11 @@ class BMStatus(object):
         self.info.dwSize = ctypes.sizeof(JOYINFOEX)
         self.info.dwFlags = JOY_RETURNBUTTONS | JOY_RETURNCENTERED | JOY_RETURNPOV | JOY_RETURNU | JOY_RETURNV | JOY_RETURNX | JOY_RETURNY | JOY_RETURNZ
         self.p_info = ctypes.pointer(self.info)
+        
+        self.joystick_id = joystick_id
 
     def poll(self):
-        if joyGetPosEx(0, self.p_info) != 0:
+        if joyGetPosEx(self.joystick_id, self.p_info) != 0:
             return False
         dwButtons = self.info.dwButtons
         return [(0 != (1 << b) & dwButtons) for b in range(self.caps.wNumButtons)], self.info
