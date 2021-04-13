@@ -74,6 +74,8 @@ scratch_up=0x2A // DIK_LSHIFT
 keyrepeat_firstinput_ticks=2
 // Interval between inputs (e.g. 2 means 2 ticks for one input) for scratch repeating inputs
 keyrepeat_interval_ticks=2
+// How long in seconds one tick holds down the key for (recommended low values like 0.01)
+keyrepeat_press_duration_per_tick=0
 
 ++++BUTTON++++ // key 1
 button_input_index=8

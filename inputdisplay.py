@@ -46,23 +46,35 @@ class KeyBindDirectInput(object):
         self.pressed = False
         
 class KeyRepeater(object):
-    def __init__(self, keybind, firstinput_ticks, interval_ticks):
+    def __init__(self, keybind, firstinput_ticks, interval_ticks, hold_duration):
         self.keybind = keybind
         self.interval = interval_ticks
         self.firstinput = firstinput_ticks
         self.remaining_ticks = -1
+        self.hold_duration = hold_duration
+        self.hold_until = time.time()
+        self.is_holding = False
         
     def tick(self):
         if self.remaining_ticks == -1:
             self.remaining_ticks = self.firstinput
         if self.remaining_ticks == 0:
-            self.keybind.press()
-            self.keybind.release()
+            if self.is_holding:
+                self.hold_until = min(self.hold_until + self.hold_duration, time.time() + 2*self.hold_duration)
+            else:
+                self.keybind.press()
+                self.is_holding = True
+                self.hold_until = time.time() + self.hold_duration
             self.remaining_ticks = self.interval
         self.remaining_ticks -= 1
     
     def stop(self):
         self.remaining_ticks = -1
+        
+    def update(self):
+        if self.is_holding and time.time() >= self.hold_until:
+            self.is_holding = False
+            self.keybind.release()
         
         
 def get_keybind_class(get_data):
@@ -187,11 +199,13 @@ class Turntable(object):
             KeyBind(get_data('scratch_up_repeating', transform=int_or_hex, default=None)),
             get_data('keyrepeat_firstinput_ticks', transform=int_or_hex, default=2),
             get_data('keyrepeat_interval_ticks', transform=int_or_hex, default=2),
+            get_data('keyrepeat_press_duration_per_tick', transform=float, default=0),
         )
         self.scratch_down_repeating = KeyRepeater(
             KeyBind(get_data('scratch_down_repeating', transform=int_or_hex, default=None)),
             get_data('keyrepeat_firstinput_ticks', transform=int_or_hex, default=2),
             get_data('keyrepeat_interval_ticks', transform=int_or_hex, default=2),
+            get_data('keyrepeat_press_duration_per_tick', transform=float, default=0),
         )
         
         
@@ -291,6 +305,9 @@ class InputDisplay(object):
                 if curr_time - tt.last_negative_time > tt.detection_timeout:
                     tt.scratch_down.release()
                     tt.scratch_down_repeating.stop()
+                    
+            tt.scratch_up_repeating.update()
+            tt.scratch_down_repeating.update()
 
             tt.last_value = value
         
