@@ -1,7 +1,7 @@
 # BM Input Display
 Input display for rhythm game controllers
 
-[Download Here](https://ci.appveyor.com/project/wcko87/bm-input-display/build/artifacts)
+[Download Here](https://ci.appveyor.com/project/wcko87/bm-input-display/build/artifacts) 
 
 ### Video Example: (the input display is in the bottom right corner)
 
