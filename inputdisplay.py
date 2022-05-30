@@ -177,7 +177,19 @@ class KeyButton(object):
         else:
             self.hold_start_time = None
             return self.color_dark
+        
+class VisibilityTracker(object):
+    def __init__(self, settings):
+        self.hide_time = int(settings.get('autohide_duration', -1))/1000
+        self.last_action_time = -self.hide_time
+        self.last_visibility = None
+        
+    def action(self, curr_time):
+        self.last_action_time = curr_time
             
+    def get_visibility(self, curr_time):
+        if self.hide_time <= 0: return 'normal'
+        return 'hidden' if (curr_time - self.last_action_time >= self.hide_time) else 'normal'
     
     
 class Turntable(object):
@@ -244,6 +256,7 @@ class InputDisplay(object):
         
         for bt in self.ui_buttons:
             button_pressed = button_status[bt.button_index] if bt.button_index < len(button_status) else False
+            if button_pressed: self.visibility_tracker.action(curr_time)
             canvas.itemconfig(bt.rect, fill=bt.get_color(button_pressed, curr_time))
             bt.key_bind.press() if button_pressed else bt.key_bind.release()
             
@@ -252,6 +265,7 @@ class InputDisplay(object):
         
             if tt.last_value == None: tt.last_value = value
             diff_y = value - tt.last_value
+            if diff_y != 0: self.visibility_tracker.action(curr_time)
             if diff_y > 32768: diff_y -= 65536 + 255
             elif diff_y < -32768: diff_y += 65536 + 255
             if tt.reverse_turntable: diff_y = -diff_y
@@ -305,11 +319,18 @@ class InputDisplay(object):
                 if curr_time - tt.last_negative_time > tt.detection_timeout:
                     tt.scratch_down.release()
                     tt.scratch_down_repeating.stop()
-                    
+                                        
             tt.scratch_up_repeating.update()
             tt.scratch_down_repeating.update()
 
             tt.last_value = value
+            
+            # update visibility
+            visibility = self.visibility_tracker.get_visibility(curr_time)
+            if visibility != self.visibility_tracker.last_visibility:
+                for element in self.all_elements:
+                    canvas.itemconfig(element, state=visibility)
+                self.visibility_tracker.last_visibility = visibility
         
         
         canvas.after(15, self.loop)
@@ -335,9 +356,12 @@ class InputDisplay(object):
                 else:
                     return default
             return get_data
+            
+        self.visibility_tracker = VisibilityTracker(settings)
 
         self.ui_buttons = []
         self.ui_turntables = []
+        self.all_elements = []
             
         for button_data in self.buttons:
             gd = get_data_from(button_data)
@@ -345,13 +369,16 @@ class InputDisplay(object):
             x1,y1,x2,y2 = center_to_bounds(gd('button_center_x'), gd('button_center_y'), gd('button_width'), gd('button_height'))
             rect = canvas.create_rectangle(x1,y1,x2,y2,fill=settings['button_color_dark'])
             self.ui_buttons.append(KeyButton(gd, rect))
+            self.all_elements.append(rect)
     
         
         for tt_data in self.turntables:
             gd = get_data_from(tt_data)
             def create_circle(diameter, outline, width):
                 x1,y1,x2,y2 = center_to_bounds(gd('turntable_center_x'), gd('turntable_center_y'), diameter, diameter)
-                return canvas.create_oval(x1,y1,x2,y2,outline=outline,width=width)
+                circle = canvas.create_oval(x1,y1,x2,y2,outline=outline,width=width)
+                self.all_elements.append(circle)
+                return circle
             
             outline_circle = create_circle(gd('turntable_diameter_outline'), settings['background_color'], gd('turntable_thickness_outline'))
             create_circle(gd('turntable_diameter_outer_ring'), gd('turntable_color_outer_ring'), gd('turntable_thickness_outer_ring'))

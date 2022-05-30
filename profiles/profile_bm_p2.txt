@@ -48,6 +48,8 @@ turntable_thickness_circle=7
 button_flash_fade_time_ms=150
 turntable_detection_timeout_ms=100
 
+autohide_duration=-1
+
 // Number of full revolutions to go from 0-255 in the analog input. This value is smaller for more sensitive turntables. Use this to calibrate the input display's turntable.
 turntable_num_revolutions_per_cycle=3.29
 turntable_reverse_direction=false
