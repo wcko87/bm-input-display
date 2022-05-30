@@ -145,7 +145,7 @@ def parse_config(file_name):
                 raise Exception('Unknown label: %s' % label)
         elif '=' in line:
             if current_action == None: continue
-            key, value = line.split('=', 1)
+            key, value = (x.strip() for x in line.split('=', 1))
             current_action(key, value)
         else:
             raise Exception('Unable to parse line: %s' % line)
