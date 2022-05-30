@@ -1,7 +1,7 @@
 # BM Input Display
 Input display for rhythm game controllers
 
-[Download Here](https://ci.appveyor.com/project/wcko87/bm-input-display/build/artifacts)
+[Download Here](https://ci.appveyor.com/project/wcko87/bm-input-display/build/artifacts) 
 
 ### Video Example: (the input display is in the bottom right corner)
 
@@ -62,5 +62,3 @@ The Infinitas setting UI does not offer an option to unbind controller keys. How
 (This is only relevant when making your own profiles)
 
 By default, the input display's keybinds do not work in Infinitas. However, you can switch the keybind method to DirectInput by setting `use_directinput_keybinds=true` in the config. DirectInput works with Infinitas, but uses a completely different set of input keycodes from the default (Win32API). The two given Infinitas profiles use this.
-
-
